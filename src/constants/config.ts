@@ -66,12 +66,10 @@ export const config: TConfig = {
   sections: {
     about: {
       p: "Introduction",
-      h2: "Overview.",
-      content: `I'm a skilled software developer with experience in TypeScript and
-      JavaScript, and expertise in frameworks like React, Node.js, and
-      Three.js. I'm a quick learner and collaborate closely with clients to
-      create efficient, scalable, and user-friendly solutions that solve
-      real-world problems. Let's work together to bring your ideas to life!`,
+      h2: "know about me.",
+      content: `I am a skilled Full-Stack Developer with expertise in React, Next.js, Node.js, Express, MongoDB, and SQL (RDBMS), specializing in building scalable web applications and seamless API integrations. With hands-on experience in Java for Android development, gateway and webhook integrations, and working with platforms like Shopify, MailerLite, and Brevo, I aim to deliver efficient and user-friendly solutions.
+
+My recent projects include BubbleTask, a dynamic task management app, an Invoice Generator Web App, and a Data Visualization Dashboard with PHP Laravel and MySQL.`,
     },
     experience: {
       p: "What I have done so far",
@@ -79,7 +77,7 @@ export const config: TConfig = {
     },
     feedbacks: {
       p: "What others say",
-      h2: "Testimonials.",
+      h2: "Words That Inspire.",
     },
     works: {
       p: "My work",
