@@ -27,7 +27,7 @@ import {
   // meta,
   // starbucks,
   makedreams,
-  cofastudio,
+  // cofastudio,
   hashinteractive,
   AtulNaik,
   SushantTarkas,
