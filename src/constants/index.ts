@@ -30,7 +30,7 @@ import {
   cofastudio,
   hashinteractive,
   AtulNaik,
-  mayuryeole,
+  SushantTarkas,
   nikhilsuryawanshi,
   rajfartale,
   vaibhavnagare,
@@ -154,33 +154,33 @@ const experiences: TExperience[] = [
     ],    
   },
   {
-    title: "Backend Developer",
-    companyName: "",
-    icon: cofastudio,
-    iconBg: "#383E56",
-    date: "May 2023 - July 2024",
-    points: [
-      "Developing and maintaining Android applications using Java.",
-      "Participating in daily stand-ups and code reviews to improve code quality.",
-      "Preparing app layout and designing intuitive UI for a seamless user experience.",
-      "Connecting activities with the database and performing database operations.",
-      "Collaborating with cross-functional teams to deliver high-quality applications."
-    ],    
-  },
-  {
-    title: "Frontend Developer",
+    title: "Full stack developer",
     companyName: "",
     icon: hashinteractive,
     iconBg: "#383E56",
-    date: "March 2022 - April 2023",
+    date: "June 2022 - June 2024",
     points: [
-      "Crafting dynamic and interactive user interfaces with React.js to enhance user experience.",
-      "Translating UI/UX designs into pixel-perfect, high-performance web components.",
-      "Optimizing application performance and ensuring smooth navigation across all devices and screen sizes.",
-      "Collaborating closely with backend developers to manage API integration and data flow.",
-      "Staying up-to-date with modern frontend technologies and best practices to continuously improve code quality."
+      "Designed responsive and user-friendly UI components using React.js.",
+      "Developed scalable backend services and RESTful APIs using Node.js, Express.js.",
+      "Preparing app layout and designing intuitive UI for a seamless user experience.",
+      "Managed application data using MongoDB, including schema design and performance optimization.",
+      "Developed secure authentication and feature endpoints (login, CRUD, third-party integrations)."
     ],    
   },
+  // {
+  //   title: "Frontend Developer",
+  //   companyName: "",
+  //   icon: hashinteractive,
+  //   iconBg: "#383E56",
+  //   date: "March 2022 - April 2023",
+  //   points: [
+  //     "Crafting dynamic and interactive user interfaces with React.js to enhance user experience.",
+  //     "Translating UI/UX designs into pixel-perfect, high-performance web components.",
+  //     "Optimizing application performance and ensuring smooth navigation across all devices and screen sizes.",
+  //     "Collaborating closely with backend developers to manage API integration and data flow.",
+  //     "Staying up-to-date with modern frontend technologies and best practices to continuously improve code quality."
+  //   ],    
+  // },
   // {
   //   title: "Full stack Developer",
   //   companyName: "Meta",
@@ -224,10 +224,10 @@ const testimonials: TTestimonial[] = [
   {
     testimonial:
       "His expertise in development was outstanding. From designing intuitive UI to managing database operations, he handled everything flawlessly.",
-    name: "Mayur Yeole",
-    designation: "CEO",
-    company: "Cofa Studio",
-    image: mayuryeole,
+    name: "Sushant Tarkas",
+    designation: "Project Head",
+    company: "Hash Interactive",
+    image: SushantTarkas,
   },
   {
     testimonial:

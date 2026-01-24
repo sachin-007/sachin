@@ -37,6 +37,7 @@ import mayuryeole from "./peoples/mayuryeole.png"
 import nikhilsuryawanshi from "./peoples/nikhilsuryawanshi.png"
 import rajfartale from "./peoples/rajfartale.png"
 import vaibhavnagare from "./peoples/vaibhavnagare.png"
+import SushantTarkas from "./peoples/SushantTarkas.png"
 
 import MK from "./projects/MK.png"
 import Farm from "./projects/Farm.png"
@@ -83,6 +84,7 @@ export {
   nikhilsuryawanshi,
   rajfartale,
   vaibhavnagare,
+  SushantTarkas,
   MK,
   Farm,
   Tmesocial,
