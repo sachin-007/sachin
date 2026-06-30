@@ -49,6 +49,11 @@ import carrent from "./carrent.png";
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 
+import githublogo from "./connect/githublogo.png";
+import linkedinlogo from "./connect/linkedinlogo.png";
+import whatsapplogo from "./connect/whatsapplogo.png";
+import xlogo from "./connect/xlogo.jpg";
+
 export {
   logo,
   backend,
@@ -94,4 +99,8 @@ export {
   carrent,
   jobit,
   tripguide,
+  githublogo,
+  linkedinlogo,
+  whatsapplogo,
+  xlogo,
 };

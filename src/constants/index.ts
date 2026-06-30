@@ -13,6 +13,10 @@ import {
   creator,
   web,
   javascript,
+  githublogo,
+  linkedinlogo,
+  whatsapplogo,
+  xlogo,
   typescript,
   html,
   css,
@@ -360,4 +364,27 @@ const projects: TProject[] = [
   },
 ];
 
-export { services, technologies, experiences, testimonials, projects };
+const Connectme = [
+  {
+    name: "GitHub",
+    url: "https://github.com/sachin-007",
+    icon: githublogo,
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com/in/sachin-bachhav",
+    icon: linkedinlogo,
+  },
+  {
+    name: "WhatsApp",
+    url: "https://wa.me/919999999999",
+    icon: whatsapplogo,
+  },
+  {
+    name: "X",
+    url: "https://x.com/sachin_007",
+    icon: xlogo,
+  },
+];
+
+export { services, technologies, experiences, testimonials, projects, Connectme };
