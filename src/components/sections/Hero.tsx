@@ -9,17 +9,23 @@ const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  // Attempt to unmute as soon as the video is ready; browser may block if no prior interaction
-  const unmuteOnReady = () => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.muted = false;
-    setIsMuted(video.muted); // stays true if browser blocks unmuted playback
-  };
-
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    const unmuteOnReady = () => {
+      video.muted = false;
+      // Safari pauses the video when unmuted without a user gesture — play() re-starts it.
+      // If the browser rejects unmuted play (NotAllowedError), fall back to muted playback.
+      video.play().then(() => {
+        setIsMuted(false);
+      }).catch(() => {
+        video.muted = true;
+        setIsMuted(true);
+        video.play().catch(() => {});
+      });
+    };
+
     video.addEventListener("canplay", unmuteOnReady, { once: true });
     return () => video.removeEventListener("canplay", unmuteOnReady);
   }, []);
