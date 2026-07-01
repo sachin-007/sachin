@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 import { styles } from "../../constants/styles";
@@ -8,33 +8,23 @@ import { config } from "../../constants/config";
 const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
+  const [showUnmutePrompt, setShowUnmutePrompt] = useState(true);
 
-  useEffect(() => {
+  // Browsers block audio without a prior user gesture — this click IS that gesture.
+  const handleUnmuteClick = () => {
     const video = videoRef.current;
     if (!video) return;
-
-    const unmuteOnReady = () => {
-      video.muted = false;
-      // Safari pauses the video when unmuted without a user gesture — play() re-starts it.
-      // If the browser rejects unmuted play (NotAllowedError), fall back to muted playback.
-      video.play().then(() => {
-        setIsMuted(false);
-      }).catch(() => {
-        video.muted = true;
-        setIsMuted(true);
-        video.play().catch(() => {});
-      });
-    };
-
-    video.addEventListener("canplay", unmuteOnReady, { once: true });
-    return () => video.removeEventListener("canplay", unmuteOnReady);
-  }, []);
+    video.muted = false;
+    setIsMuted(false);
+    setShowUnmutePrompt(false);
+  };
 
   const toggleMute = () => {
     const video = videoRef.current;
     if (!video) return;
     video.muted = !video.muted;
     setIsMuted(video.muted);
+    setShowUnmutePrompt(false);
   };
 
   const handleVideoEnd = () => {
@@ -53,6 +43,22 @@ const Hero = () => {
         onEnded={handleVideoEnd}
         className="absolute inset-0 h-full w-full object-cover"
       />
+
+      {/* Tap-to-unmute overlay — disappears after first interaction */}
+      {showUnmutePrompt && (
+        <button
+          onClick={handleUnmuteClick}
+          className="absolute inset-0 z-20 flex items-center justify-center"
+          aria-label="Tap to unmute video"
+        >
+          <span className="flex items-center gap-2 rounded-full bg-black/50 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-black/70">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
+              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM17.78 9.22a.75.75 0 1 0-1.06 1.06L18.44 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06l1.72-1.72 1.72 1.72a.75.75 0 1 0 1.06-1.06L20.56 12l1.72-1.72a.75.75 0 1 0-1.06-1.06l-1.72 1.72-1.72-1.72Z" />
+            </svg>
+            Tap to unmute
+          </span>
+        </button>
+      )}
 
       {/* Speaker toggle — bottom-right corner, away from text */}
       <button
