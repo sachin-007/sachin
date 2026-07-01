@@ -1,30 +1,77 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 import { styles } from "../../constants/styles";
 // import { ComputersCanvas } from "../canvas"; // 3D desktop model — re-enable to restore
 import { config } from "../../constants/config";
 
+const STORAGE_KEY = "videoMuted";
+
 const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
-  const [showUnmutePrompt, setShowUnmutePrompt] = useState(true);
 
-  // Browsers block audio without a prior user gesture — this click IS that gesture.
-  const handleUnmuteClick = () => {
+  useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    video.muted = false;
-    setIsMuted(false);
-    setShowUnmutePrompt(false);
-  };
+
+    const unmute = () => {
+      video.muted = false;
+      setIsMuted(false);
+      localStorage.setItem(STORAGE_KEY, "false");
+    };
+
+    // Remove listeners once unmuted (whichever fires first)
+    const EVENTS = ["click", "keydown", "touchend"] as const;
+    const onFirstGesture = () => {
+      unmute();
+      EVENTS.forEach(e => document.removeEventListener(e, onFirstGesture));
+    };
+
+    const startMuted = () => {
+      video.muted = true;
+      setIsMuted(true);
+      video.play().catch(() => {});
+      // Unmute on the very first user gesture anywhere on the page
+      EVENTS.forEach(e => document.addEventListener(e, onFirstGesture, { once: true }));
+    };
+
+    // Strategy 1: try unmuted autoplay directly (works for returning users via browser MEI score)
+    // Strategy 2: localStorage preference from a previous session
+    const wantsUnmuted = localStorage.getItem(STORAGE_KEY) === "false";
+
+    if (wantsUnmuted) {
+      // Returning user who previously unmuted — attempt unmuted autoplay
+      video.muted = false;
+      video.play().then(() => {
+        setIsMuted(false);
+      }).catch(() => {
+        // MEI not high enough yet on this device — fall back and wait for first gesture
+        startMuted();
+      });
+    } else {
+      // First visit: try unmuted autoplay (Chrome MEI may allow it)
+      video.play().then(() => {
+        // Browser allowed unmuted autoplay — great!
+        setIsMuted(false);
+        localStorage.setItem(STORAGE_KEY, "false");
+      }).catch(() => {
+        // Blocked — mute and auto-unmute on first any interaction
+        startMuted();
+      });
+    }
+
+    return () => {
+      EVENTS.forEach(e => document.removeEventListener(e, onFirstGesture));
+    };
+  }, []);
 
   const toggleMute = () => {
     const video = videoRef.current;
     if (!video) return;
     video.muted = !video.muted;
     setIsMuted(video.muted);
-    setShowUnmutePrompt(false);
+    localStorage.setItem(STORAGE_KEY, String(video.muted));
   };
 
   const handleVideoEnd = () => {
@@ -38,29 +85,12 @@ const Hero = () => {
         ref={videoRef}
         src="/Introduction_Portfolio_video.mp4"
         autoPlay
-        muted
         playsInline
         onEnded={handleVideoEnd}
         className="absolute inset-0 h-full w-full object-cover"
       />
 
-      {/* Tap-to-unmute overlay — disappears after first interaction */}
-      {showUnmutePrompt && (
-        <button
-          onClick={handleUnmuteClick}
-          className="absolute inset-0 z-20 flex items-center justify-center"
-          aria-label="Tap to unmute video"
-        >
-          <span className="flex items-center gap-2 rounded-full bg-black/50 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-black/70">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5">
-              <path d="M13.5 4.06c0-1.336-1.616-2.005-2.56-1.06l-4.5 4.5H4.508c-1.141 0-2.318.664-2.66 1.905A9.76 9.76 0 0 0 1.5 12c0 .898.121 1.768.35 2.595.341 1.24 1.518 1.905 2.659 1.905h1.93l4.5 4.5c.945.945 2.561.276 2.561-1.06V4.06ZM17.78 9.22a.75.75 0 1 0-1.06 1.06L18.44 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06l1.72-1.72 1.72 1.72a.75.75 0 1 0 1.06-1.06L20.56 12l1.72-1.72a.75.75 0 1 0-1.06-1.06l-1.72 1.72-1.72-1.72Z" />
-            </svg>
-            Tap to unmute
-          </span>
-        </button>
-      )}
-
-      {/* Speaker toggle — bottom-right corner, away from text */}
+      {/* Speaker toggle — bottom-right corner */}
       <button
         onClick={toggleMute}
         className="absolute bottom-8 right-6 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition hover:bg-black/70"
