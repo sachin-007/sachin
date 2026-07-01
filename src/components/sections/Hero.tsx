@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 import { styles } from "../../constants/styles";
@@ -9,7 +9,21 @@ const Hero = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  // Browsers only allow autoPlay when muted — click the speaker button to unmute
+  // Attempt to unmute as soon as the video is ready; browser may block if no prior interaction
+  const unmuteOnReady = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    setIsMuted(video.muted); // stays true if browser blocks unmuted playback
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.addEventListener("canplay", unmuteOnReady, { once: true });
+    return () => video.removeEventListener("canplay", unmuteOnReady);
+  }, []);
+
   const toggleMute = () => {
     const video = videoRef.current;
     if (!video) return;
