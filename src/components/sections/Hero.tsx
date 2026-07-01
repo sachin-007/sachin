@@ -40,28 +40,26 @@ const Hero = () => {
     // Strategy 2: localStorage preference from a previous session
     const wantsUnmuted = localStorage.getItem(STORAGE_KEY) === "false";
 
-    if (wantsUnmuted) {
-      // Returning user who previously unmuted — attempt unmuted autoplay
-      video.muted = false;
-      video.play().then(() => {
-        setIsMuted(false);
-      }).catch(() => {
-        // MEI not high enough yet on this device — fall back and wait for first gesture
-        startMuted();
-      });
-    } else {
-      // First visit: try unmuted autoplay (Chrome MEI may allow it)
-      video.play().then(() => {
-        // Browser allowed unmuted autoplay — great!
-        setIsMuted(false);
-        localStorage.setItem(STORAGE_KEY, "false");
-      }).catch(() => {
-        // Blocked — mute and auto-unmute on first any interaction
-        startMuted();
-      });
-    }
+    const timer = setTimeout(() => {
+      if (wantsUnmuted) {
+        video.muted = false;
+        video.play().then(() => {
+          setIsMuted(false);
+        }).catch(() => {
+          startMuted();
+        });
+      } else {
+        video.play().then(() => {
+          setIsMuted(false);
+          localStorage.setItem(STORAGE_KEY, "false");
+        }).catch(() => {
+          startMuted();
+        });
+      }
+    }, 2000);
 
     return () => {
+      clearTimeout(timer);
       EVENTS.forEach(e => document.removeEventListener(e, onFirstGesture));
     };
   }, []);
@@ -84,7 +82,6 @@ const Hero = () => {
       <video
         ref={videoRef}
         src="/Introduction_Portfolio_video.mp4"
-        autoPlay
         playsInline
         onEnded={handleVideoEnd}
         className="absolute inset-0 h-full w-full object-cover"
